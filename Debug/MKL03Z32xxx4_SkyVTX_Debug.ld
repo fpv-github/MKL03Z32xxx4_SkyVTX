@@ -6,7 +6,7 @@
  * Generated linker script file for MKL03Z32xxx4
  * Created from linkscript.ldt by FMCreateLinkLibraries
  * Using Freemarker v2.3.23
- * MCUXpresso IDE v10.3.0 [Build 2200] [2018-12-03] on 31-may-2019 19:04:32
+ * MCUXpresso IDE v10.3.0 [Build 2200] [2018-12-03] on 31-may-2019 20:42:13
  */
 
 INCLUDE "MKL03Z32xxx4_SkyVTX_Debug_library.ld"

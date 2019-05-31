@@ -207,26 +207,26 @@ int main(void) {
 	/* Show the initial channel */
 	for(int i = 0; i<8;i++){GPIO_PortToggle((void*)base[i], channel[0][i] << pin[i]);}
 	/* Increment the channel */
-	ch++;
+	//ch++;
 
 	while(1){
 		if(g_ButtonPress) {
-			ch++;
+			//ch++;
 			g_ButtonPress = false;
-//			/* Turn off all leds */
-//			for(int i = 0; i<8;i++)	{GPIO_PortSet((void*)base[i], 1U << pin[i]);}
-//			/*Show the channel in the Led Display.*/
-//			for(int i = 0; i<8;i++) {GPIO_PortToggle((void*)base[i], channel[ch][i] << pin[i]);}
-//			/* Reset state of button. */
-//			g_ButtonPress = false;
-//			/* Reset the channel variable */
-//			if (ch == 7) {
-//				ch = 0;
-//			} else {
-//				/* Increment the channel */
-//				ch++;
-//			}
-//			delay();
+			/* Turn off all leds */
+			for(int i = 0; i<8;i++)	{GPIO_PortSet((void*)base[i], 1U << pin[i]);}
+			/*Show the channel in the Led Display.*/
+			for(int i = 0; i<8;i++) {GPIO_PortToggle((void*)base[i], channel[ch][i] << pin[i]);}
+			/* Reset state of button. */
+			g_ButtonPress = false;
+			/* Reset the channel variable */
+			if (ch == 7) {
+				ch = 0;
+			} else {
+				/* Increment the channel */
+				ch++;
+			}
+			delay();
 		}
 	}
 }
