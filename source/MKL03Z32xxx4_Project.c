@@ -82,12 +82,12 @@
 #define LED_DISPLAY_H_GPIO GPIOB
 #define LED_DISPLAY_H_PIN  13U
 
-#define BOARD_SW_GPIO GPIOB
-#define BOARD_SW_PORT PORTB
-#define BOARD_SW_GPIO_PIN 5U
-#define BOARD_SW_IRQ PORTB
-#define BOARD_SW_IRQ_HANDLER BOARD_SW_IRQ_HANDLER
-#define BOARD_SW_NAME "BUTTON"
+#define BOARD_SW_GPIO BOARD_SW1_GPIO
+#define BOARD_SW_PORT BOARD_SW1_PORT
+#define BOARD_SW_GPIO_PIN BOARD_SW1_GPIO_PIN
+#define BOARD_SW_IRQ BOARD_SW1_IRQ
+#define BOARD_SW_IRQ_HANDLER BOARD_SW1_IRQ_HANDLER
+#define BOARD_SW_NAME BOARD_SW1_NAME
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -168,13 +168,12 @@ void BOARD_SW_IRQ_HANDLER(void)
     GPIO_PortClearInterruptFlags(BOARD_SW_GPIO, 1U << BOARD_SW_GPIO_PIN);
      /*Change state of button.*/
     g_ButtonPress = true;
-/*
- Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt
+    /*
+ 	 Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
+  	  exception return operation might vector to incorrect interrupt */
 #if defined __CORTEX_M && (__CORTEX_M == 4U)
     __DSB();
 #endif
-*/
 }
 
 /*
@@ -194,38 +193,34 @@ int main(void) {
   	/* Init FSL debug console. */
     BOARD_InitDebugConsole();
 
-/* Init input switch GPIO.*/
-#if (defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT)
-	GPIO_SetPinInterruptConfig(BOARD_SW_GPIO, BOARD_SW_GPIO_PIN, kGPIO_InterruptRisingEdge);
-#else
-	PORT_SetPinInterruptConfig(BOARD_SW_PORT, BOARD_SW_GPIO_PIN, kPORT_InterruptRisingEdge);
-#endif
-	//EnableIRQ(BOARD_SW_IRQ);
-	GPIO_PinInit(BOARD_SW_GPIO, BOARD_SW_GPIO_PIN, &sw_config);
+    /* Init input switch GPIO. */
+    PORT_SetPinInterruptConfig(BOARD_SW_PORT, BOARD_SW_GPIO_PIN, kPORT_InterruptRisingEdge);
+    EnableIRQ(BOARD_SW_IRQ);
+    GPIO_PinInit(BOARD_SW_GPIO, BOARD_SW_GPIO_PIN, &sw_config);
 
 
 	/* Show the initial channel */
 	for(int i = 0; i<8;i++){GPIO_PortToggle((void*)base[i], channel[0][i] << pin[i]);}
 	/* Increment the channel */
-	//ch++;
+	ch++;
 
 	while(1){
 		if(g_ButtonPress) {
-			//ch++;
+			ch++;
 			g_ButtonPress = false;
 			/* Turn off all leds */
 			for(int i = 0; i<8;i++)	{GPIO_PortSet((void*)base[i], 1U << pin[i]);}
-			/*Show the channel in the Led Display.*/
+/*			Show the channel in the Led Display.
 			for(int i = 0; i<8;i++) {GPIO_PortToggle((void*)base[i], channel[ch][i] << pin[i]);}
-			/* Reset state of button. */
+			 Reset state of button.
 			g_ButtonPress = false;
-			/* Reset the channel variable */
+			 Reset the channel variable
 			if (ch == 7) {
 				ch = 0;
 			} else {
-				/* Increment the channel */
+				 Increment the channel
 				ch++;
-			}
+			}*/
 			delay();
 		}
 	}
